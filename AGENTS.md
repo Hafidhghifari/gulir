@@ -7,8 +7,9 @@ dan layar bertindak sebagai viewport yang bergeser ke kolom yang sedang fokus.
 Baca juga sebelum mengubah perilaku: `PRD.md` (apa & kenapa) dan `DESIGN.md` (bagaimana).
 
 ## Status saat ini
-- v0.1 ditulis **tanpa pernah di-compile**. Tugas pertama di sesi baru: jalankan `swift build`,
-  perbaiki semua error/warning, lalu uji manual (lihat "Verifikasi").
+- v0.1 sudah lolos `swift build` dan `swift build -c release` tanpa error & warning
+  (Swift 6.4, macOS 27.2), dan `./build.sh` menghasilkan .app + .dmg.
+  Uji manual (lihat "Verifikasi") **belum** dilakukan.
 - Hanya layar utama, polling tiap 0,5 detik, tanpa test.
 
 ## Perintah
