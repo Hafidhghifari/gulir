@@ -8,13 +8,18 @@ Layar bertindak seperti "jendela pandang" yang menggeser strip ke kolom yang sed
 - macOS 13 (Ventura) atau lebih baru — Intel maupun Apple silicon
 - Xcode Command Line Tools: `xcode-select --install`
 
-## Build & jalankan
+## Build jadi .dmg
 ```bash
 cd Gulir
 chmod +x build.sh
 ./build.sh
-open build/Gulir.app
 ```
+Hasilnya `build/Gulir.app` dan `build/Gulir.dmg`. Buka DMG-nya, seret Gulir ke Applications, lalu buka dari Applications.
+
+> DMG ini ditandatangani ad-hoc: aman dipakai di Mac kamu sendiri.
+> Kalau dikirim ke Mac orang lain, macOS akan memblokirnya ("tidak bisa diverifikasi").
+> Supaya bisa dibagikan tanpa peringatan, perlu Apple Developer Program ($99/tahun),
+> tanda tangan Developer ID, dan notarisasi.
 Saat pertama dibuka, macOS akan minta izin **Accessibility**:
 System Settings → Privacy & Security → Accessibility → nyalakan **Gulir**.
 Gulir otomatis mulai bekerja begitu izin diberikan (tidak perlu restart).

@@ -31,6 +31,18 @@ EOF
 # Tanda tangan ad-hoc (cukup untuk dipakai sendiri, bukan untuk dibagikan)
 codesign --force --sign - "$APP"
 
+# Bungkus jadi .dmg (isi: Gulir.app + pintasan ke folder Applications)
+DMG="build/Gulir.dmg"
+STAGING="build/dmg"
+rm -rf "$STAGING" "$DMG"
+mkdir -p "$STAGING"
+cp -R "$APP" "$STAGING/"
+ln -s /Applications "$STAGING/Applications"
+hdiutil create -volname "Gulir" -srcfolder "$STAGING" -ov -format UDZO "$DMG" >/dev/null
+rm -rf "$STAGING"
+
 echo ""
-echo "Selesai: $(pwd)/$APP"
-echo "Jalankan dengan:  open \"$APP\""
+echo "Selesai:"
+echo "  App : $(pwd)/$APP"
+echo "  DMG : $(pwd)/$DMG"
+echo "Buka DMG-nya, lalu seret Gulir ke folder Applications."
