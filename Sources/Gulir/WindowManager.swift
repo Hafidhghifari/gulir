@@ -27,6 +27,7 @@ final class WindowManager: NSObject {
     private var focus = 0
     private var scroll: CGFloat = 0
     private var timer: Timer?
+    private var swipe: TrackpadSwipe?
     private var ignoreFocusUntil = Date.distantPast
 
     // Pengaturan — silakan ubah sesuai selera
@@ -34,18 +35,34 @@ final class WindowManager: NSObject {
     private let presets: [CGFloat] = [1.0 / 3.0, 0.5, 2.0 / 3.0, 1.0]
     private let defaultFraction: CGFloat = 0.5
     private let pollInterval: TimeInterval = 0.5
+    private let swipeThreshold: CGFloat = 80 // pt geser horizontal per kolom (⌥ + swipe 2 jari)
 
     // MARK: - Mulai
 
     func start() {
         guard timer == nil else { return }
         registerHotKeys()
+        startTrackpadSwipe()
         timer = Timer.scheduledTimer(timeInterval: pollInterval, target: self,
                                      selector: #selector(tick), userInfo: nil, repeats: true)
         sync(forceLayout: true)
     }
 
     @objc private func tick() { sync(forceLayout: false) }
+
+    private func startTrackpadSwipe() {
+        let swipe = TrackpadSwipe(threshold: swipeThreshold, isActive: { [weak self] in
+            guard let self else { return false }
+            return self.isEnabled && !self.columns.isEmpty
+        }, onStep: { [weak self] step in
+            switch step {
+            case .left: self?.focusLeft()
+            case .right: self?.focusRight()
+            }
+        })
+        swipe.start()
+        self.swipe = swipe
+    }
 
     private func registerHotKeys() {
         let base = UInt32(controlKey | optionKey)
