@@ -4,11 +4,21 @@ Semua jendela di layar utama disusun jadi **kolom-kolom berjajar ke samping**.
 Buka jendela baru → muncul di kanan kolom aktif, jendela lain **tidak mengecil**.
 Layar bertindak seperti "jendela pandang" yang menggeser strip ke kolom yang sedang fokus.
 
+## Unduh
+**[⬇ Unduh Gulir.dmg (v0.1.0, pre-release)](https://github.com/Hafidhghifari/gulir/releases/download/v0.1.0/Gulir.dmg)**
+· [semua rilis](https://github.com/Hafidhghifari/gulir/releases)
+
+> Build unduhan saat ini hanya untuk **Apple silicon** (M1 ke atas). Pengguna Mac Intel: build sendiri (lihat di bawah).
+
+Buka DMG-nya, seret **Gulir** ke **Applications**, lalu buka dari Applications.
+Karena belum dinotarisasi, macOS akan memblokirnya saat pertama dibuka. Klik kanan **Gulir.app** → **Open** → **Open**,
+atau jalankan `xattr -dr com.apple.quarantine /Applications/Gulir.app`.
+
 ## Syarat
 - macOS 13 (Ventura) atau lebih baru — Intel maupun Apple silicon
-- Xcode Command Line Tools: `xcode-select --install`
+- Xcode Command Line Tools: `xcode-select --install` (hanya untuk build sendiri)
 
-## Build jadi .dmg
+## Build sendiri jadi .dmg
 ```bash
 cd Gulir
 chmod +x build.sh
