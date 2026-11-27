@@ -5,10 +5,10 @@ Buka jendela baru → muncul di kanan kolom aktif, jendela lain **tidak mengecil
 Layar bertindak seperti "jendela pandang" yang menggeser strip ke kolom yang sedang fokus.
 
 ## Unduh
-**[⬇ Unduh Gulir.dmg (v0.1.0, pre-release)](https://github.com/Hafidhghifari/gulir/releases/download/v0.1.0/Gulir.dmg)**
+**[⬇ Unduh Gulir.dmg (v0.1.1, pre-release)](https://github.com/Hafidhghifari/gulir/releases/download/v0.1.1/Gulir.dmg)**
 · [semua rilis](https://github.com/Hafidhghifari/gulir/releases)
 
-> Build unduhan saat ini hanya untuk **Apple silicon** (M1 ke atas). Pengguna Mac Intel: build sendiri (lihat di bawah).
+> Universal: jalan di Mac Apple silicon maupun Intel, macOS 13 ke atas.
 
 Buka DMG-nya, seret **Gulir** ke **Applications**, lalu buka dari Applications.
 Karena belum dinotarisasi, macOS akan memblokirnya saat pertama dibuka. Klik kanan **Gulir.app** → **Open** → **Open**,
