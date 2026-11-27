@@ -1,0 +1,35 @@
+# Push tag v* (mis. `git tag v0.1.0 && git push origin v0.1.0`) →
+# build Gulir.dmg di macOS lalu lampirkan ke GitHub Release.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build .app + .dmg
+        run: ./build.sh
+
+      - name: Buat GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          # Selama masih v0.x (atau tag berisi "-", mis. v0.2.0-beta) → pre-release
+          flags=()
+          if [[ "$TAG" == v0.* || "$TAG" == *-* ]]; then
+            flags+=(--prerelease)
+          fi
+          gh release create "$TAG" build/Gulir.dmg \
+            --title "Gulir $TAG" \
+            --notes-file .github/release-notes.md \
+            --generate-notes \
+            "${flags[@]}"
