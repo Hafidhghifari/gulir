@@ -3,12 +3,15 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-swift build -c release
+# Universal binary: jalan di Apple silicon (arm64) dan Intel (x86_64)
+ARCHS=(--arch arm64 --arch x86_64)
+swift build -c release "${ARCHS[@]}"
+BIN="$(swift build -c release "${ARCHS[@]}" --show-bin-path)/Gulir"
 
 APP="build/Gulir.app"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS"
-cp .build/release/Gulir "$APP/Contents/MacOS/Gulir"
+cp "$BIN" "$APP/Contents/MacOS/Gulir"
 
 cat > "$APP/Contents/Info.plist" <<'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
