@@ -90,6 +90,13 @@ Carbon `RegisterEventHotKey`: tidak butuh izin Input Monitoring, didukung sampai
 dan gagal secara eksplisit kalau kombinasi sudah dipakai app lain. Kekurangannya: tidak bisa
 menangkap gestur atau tombol modifier saja; untuk itu (v0.5) perlu `CGEventTap` + izin tambahan.
 
+**Gestur trackpad (⌥ + swipe 2 jari):** `TrackpadSwipe` memasang `CGEventTap` aktif untuk event
+`scrollWheel` (cukup izin Accessibility). Keputusan diambil sekali di awal gestur (fase *began*): kalau
+hanya ⌥ yang ditahan dan tiling aktif, seluruh gestur termasuk momentum-nya ditelan; selain itu event
+diteruskan apa adanya. Delta horizontal diubah jadi langkah fokus oleh `GulirCore.SwipeTracker`
+(murni, di-unit-test). Langkahnya diskret (satu kolom per ~80 pt), bukan mengikuti jari, karena memindahkan
+jendela app lain lewat AX terlalu lambat untuk animasi per frame. Swipe 3 jari tidak dipakai: tidak ada API publik.
+
 ## 9. Keputusan desain
 | Keputusan | Alternatif | Alasan |
 |---|---|---|

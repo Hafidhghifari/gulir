@@ -42,12 +42,14 @@ Gulir otomatis mulai bekerja begitu izin diberikan (tidak perlu restart).
 |---|---|
 | ⌃⌥ H / L atau ⌃⌥ ← / → | Pindah fokus ke kolom kiri / kanan |
 | ⌃⌥⇧ H / L atau ⌃⌥⇧ ← / → | Pindahkan kolom ke kiri / kanan |
+| ⌥ + swipe 2 jari kiri / kanan (trackpad) | Pindah fokus ke kolom kiri / kanan |
 | ⌃⌥ R | Ganti lebar kolom: ⅓ → ½ → ⅔ → penuh |
 | ⌃⌥ F | Lebar penuh / kembali ke lebar sebelumnya |
 | ⌃⌥ C | Tengahkan kolom aktif |
 | ⌃⌥ T | Nyalakan / matikan tiling |
 
 Klik jendela pakai mouse atau Cmd-Tab juga menggeser strip ke jendela itu.
+Selama ⌥ ditahan, scroll 2 jari dipakai Gulir (tidak sampai ke app di bawah kursor); tanpa ⌥, scroll berjalan normal.
 
 ## Mengubah pengaturan
 Di `Sources/Gulir/WindowManager.swift`, bagian atas class:

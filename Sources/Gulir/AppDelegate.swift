@@ -54,6 +54,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let shortcuts = [
             "⌃⌥ H / L  atau  ← / →   pindah fokus",
             "⌃⌥⇧ H / L  atau  ← / →   pindah kolom",
+            "⌥ + swipe 2 jari kiri / kanan   pindah fokus",
             "⌃⌥ R   ganti lebar (⅓ · ½ · ⅔ · penuh)",
             "⌃⌥ F   lebar penuh / kembali",
             "⌃⌥ C   tengahkan kolom",
