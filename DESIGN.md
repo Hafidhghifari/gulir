@@ -43,15 +43,23 @@ if x[f] − scroll < gap                 → scroll = x[f] − gap
 if x[f] + w[f] − scroll > area.w − gap → scroll = x[f] + w[f] − area.w + gap
 // mode center: scroll = x[f] + w[f]/2 − area.w/2
 
+// jangan sisakan ruang kosong di ujung strip (mis. setelah kolom paling kanan ditutup)
+scroll = clamp(scroll, −gap, max(−gap, x[n−1] + w[n−1] − area.w + gap))
+
 screenX[i] = area.minX + x[i] − scroll
-jika seluruhnya di kiri layar  → parkir di area.minX − w + 1
+jika seluruhnya di kiri layar  → parkir di area.minX − lebarAktual + 1
 jika seluruhnya di kanan layar → parkir di area.maxX − 1
 ```
+`lebarAktual` dibaca ulang dari jendela setelah di-resize: app dengan lebar minimum
+(mis. WhatsApp) menolak dikecilkan, dan kalau dihitung dari lebar kolom sisanya menyembul.
+Karena clamp, ⌃⌥C pada kolom pertama/terakhir tidak menengahkan (strip tidak digeser melewati ujungnya).
+Implementasi: `Sources/GulirCore/LayoutEngine.swift`, test: `Tests/GulirCoreTests/`.
 Properti yang harus dijaga (dan jadi unit test):
 - Lebar kolom tidak pernah berubah karena jumlah kolom berubah.
 - Kolom fokus selalu terlihat penuh (kecuali lebih lebar dari layar).
 - Pindah fokus ke kolom yang sudah terlihat penuh → `scroll` tidak berubah.
 - Dua kolom ½ mengisi layar tepat dengan gap yang sama di semua sisi.
+- Tidak ada ruang kosong di ujung strip selama total lebar kolom ≥ lebar layar.
 
 ## 5. Sinkronisasi (sync loop)
 Setiap tick (0,5 dtk) atau saat dipaksa:

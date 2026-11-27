@@ -1,6 +1,7 @@
 import AppKit
 import ApplicationServices
 import Carbon
+import GulirCore
 
 struct WindowRef: Hashable {
     let el: AXUIElement
@@ -160,46 +161,28 @@ final class WindowManager: NSObject {
         return CGRect(x: vis.minX, y: full.maxY - vis.maxY, width: vis.width, height: vis.height)
     }
 
-    private func columnWidth(_ fraction: CGFloat, in area: CGRect) -> CGFloat {
-        (area.width - gap) * fraction - gap
-    }
-
     private func layout(center: Bool = false) {
         guard isEnabled, !columns.isEmpty, let area = usableArea() else { return }
         focus = max(0, min(focus, columns.count - 1))
 
-        // Posisi setiap kolom di strip (koordinat strip, mulai dari 0)
-        let widths = columns.map { columnWidth($0.fraction, in: area) }
-        var xs: [CGFloat] = []
-        var x: CGFloat = 0
-        for w in widths {
-            xs.append(x)
-            x += w + gap
-        }
-
-        // Geser strip secukupnya supaya kolom fokus terlihat penuh
-        let fx = xs[focus], fw = widths[focus]
-        if center {
-            scroll = fx + fw / 2 - area.width / 2
-        } else {
-            if fx - scroll < gap { scroll = fx - gap }
-            if fx + fw - scroll > area.width - gap { scroll = fx + fw - area.width + gap }
-        }
-
-        let y = area.minY + gap
-        let h = area.height - 2 * gap
-        for (i, col) in columns.enumerated() {
-            let w = widths[i]
-            var sx = area.minX + xs[i] - scroll
-            // Jendela yang sepenuhnya di luar layar diparkir di tepi (sisa 1px),
-            // karena macOS tidak mengizinkan jendela hilang total dari layar.
-            if sx + w <= area.minX {
-                sx = area.minX - w + 1
-            } else if sx >= area.maxX {
-                sx = area.maxX - 1
+        let result = LayoutEngine.layout(fractions: columns.map { $0.fraction }, focus: focus,
+                                         scroll: scroll, area: area, gap: gap, center: center)
+        scroll = result.scroll
+        for (col, placement) in zip(columns, result.placements) {
+            AX.setFrame(col.win.el, placement.frame)
+            if case .parked(.left, let wanted) = placement {
+                parkUsingActualWidth(col.win.el, wanted: wanted, area: area)
             }
-            AX.setFrame(col.win.el, CGRect(x: sx, y: y, width: w, height: h))
         }
+    }
+
+    /// App dengan lebar minimum (mis. WhatsApp) menolak dikecilkan ke lebar kolom.
+    /// Kalau diparkir di kiri dengan lebar kolom, sisanya menyembul di tepi layar,
+    /// jadi hitung ulang posisi parkir dari lebar yang benar-benar dipakai jendela.
+    private func parkUsingActualWidth(_ el: AXUIElement, wanted: CGRect, area: CGRect) {
+        guard let actual = AX.frame(el), abs(actual.width - wanted.width) >= 1 else { return }
+        let x = LayoutEngine.parkedX(.left, width: actual.width, area: area)
+        AX.setFrame(el, CGRect(x: x, y: wanted.minY, width: actual.width, height: actual.height))
     }
 
     // MARK: - Aksi (dipanggil dari shortcut)
